@@ -1,106 +1,329 @@
-Buena Noticia
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Libreta Pro PAS: Dios sabe todas las cosas</title>
+    <style>
+        :root {
+            --primary-dark: #1e293b;
+            --biblical-red: #d22d2d;
+            --accent-gold: #b8860b;
+            --title-color: #2e5984;
+            --subtitle-color: #3d8c8c;
+            --bg-canvas: #fdfdfd;
+            --toolbar-bg: #2c3e50;
+            --text-main: #2d3436;
+        }
 
-    Justificados, pues, por la fe, tenemos paz para con Dios por medio de nuestro Señor Jesucristo. Romanos 5:1
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #ebeef1;
+            color: var(--text-main);
+            margin: 0; padding: 0;
+            display: flex; flex-direction: column; align-items: center;
+        }
 
-Dios sabe todas las cosas
+        /* TOOLBAR */
+        #toolbar {
+            width: 100%;
+            background-color: var(--toolbar-bg);
+            color: white;
+            padding: 10px;
+            display: flex; flex-wrap: wrap; gap: 15px;
+            justify-content: center; align-items: center;
+            position: sticky; top: 0; z-index: 1000;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
 
-Propósito: Desmantelar la autoacusación legalista para descansar en la justicia de Cristo.
+        .tool-group {
+            display: flex; align-items: center; gap: 8px;
+            background: rgba(255,255,255,0.1);
+            padding: 5px 12px; border-radius: 8px;
+        }
 
-    "Pues si nuestro corazón nos reprende, mayor es Dios que nuestro corazón, y él sabe todas las cosas." — 1 Juan 3:20 
+        button {
+            background: transparent; border: 1px solid rgba(255,255,255,0.3);
+            color: white; padding: 5px 10px; border-radius: 4px;
+            cursor: pointer; font-size: 14px; transition: 0.2s;
+        }
 
-Introducción: El Desgaste de la Narrativa Interna
+        button:hover { background: var(--accent-gold); color: black; }
 
-    Identificación: Existe un cansancio que no proviene del trabajo físico, sino del diálogo constante que sostenemos con nosotros mismos. Es ese murmullo que drena la paz y nos deja siempre sintiéndonos en deuda.
-    La Ilustración de Asaf (Salmo 73): Usamos a Asaf para decir: "No te pasa solo a ti". Un hombre de Dios admitió que sus pensamientos casi le hacen perder el equilibrio.
-    Su mente estaba amargada y sus pensamientos lo hacían sentir "como un animal" (v. 22).
-    Punto clave: La crisis de Asaf no fue un pecado externo, fue una crisis de pensamientos distorsionados que lo llevaron al agotamiento. Él representa a todo aquel cuya mente ha construido una versión severa y estrecha de su propia historia.
+        #stopwatch-display {
+            font-family: monospace; font-size: 1.3rem;
+            font-weight: bold; color: var(--accent-gold);
+        }
 
-Cuando la Mente se Convierte en Fiscal
+        /* CONTENEDOR */
+        .notebook-container {
+            width: 95%; max-width: 900px;
+            margin: 25px auto; background: white;
+            border-radius: 10px; box-shadow: 0 5px 25px rgba(0,0,0,0.1);
+            border: 1px solid #d1d5db; overflow: hidden;
+        }
 
-    "Pues si nuestro corazón nos reprende..." (1 Juan 3:20a)
-    La Mente que Reprende: Juan reconoce que nuestra narrativa interna a menudo actúa como un tribunal. Son pensamientos que cuestionan, enjuician y condenan, susurrando: "No fue suficiente", 
-        "Debiste hacerlo mejor".
-        “No fue suficiente.”
-        “Debiste hacerlo mejor.”
-        “Mira cómo a otros les va.”
-        “No puedes descansar todavía.”
-        “Tu esfuerzo parece en vano.”
-    La Sentencia : Cuando la mente toma el control, reinterpreta la realidad y establece veredictos de culpabilidad internos.
-    La Verdad Liberadora: Nuestra mente puede hablar, pero no tiene la autoridad final. No tiene el derecho legal de ocupar el lugar de Dios.
+        .header-pas {
+            background: var(--primary-dark);
+            color: white; padding: 30px; text-align: center;
+            border-bottom: 5px solid var(--accent-gold);
+        }
 
-Dios es Mayor que nuestros pensamientos
+        .tabs { display: flex; background: #f8fafc; border-bottom: 1px solid #e2e8f0; }
+        .tab-btn {
+            flex: 1; padding: 15px; border: none; background: none;
+            cursor: pointer; font-weight: bold; color: #64748b;
+        }
+        .tab-btn.active { 
+            color: var(--title-color); background: white; 
+            border-bottom: 3px solid var(--title-color); 
+        }
 
-    "...mayor es Dios que nuestro corazón, y él sabe todas las cosas." (1 Juan 3:20b)
-    Dios no juzga desde lo parcial: Nuestra mente juzga desde el cansancio o la inestabilidad emocional. El Padre es Mayor que nuestra manera de pensar. Sus pensamientos son más elevados.
-    Eterno conocimiento de Dios: El hecho de que "Él sabe todas las cosas" no es una amenaza, es un alivio. Tu mente solo ve el error; el Padre conoce el diseño completo.
-    Mientras tus pensamientos te dicen "insuficiente", Dios te mira a través del lente de Su amor soberano. y su obra en Cristo
+        .tab-content {
+            display: none; padding: 50px 60px; outline: none;
+            font-size: 20px; min-height: 800px; line-height: 1.7;
+            background-color: var(--bg-canvas);
+        }
+        .tab-content.active { display: block; }
 
-La Victoria de Cristo: El Caso Cerrado en el Cielo
+        /* ESTILOS DE TEXTO PERSONALIZADOS */
+        .titulo-pro { color: var(--title-color); font-size: 2.5em; text-align: center; font-weight: 800; margin-bottom: 0.5em; }
+        .subtitulo-pro { color: var(--subtitle-color); font-size: 1.6em; font-weight: 700; margin-top: 1.5em; border-bottom: 1px solid #eee; padding-bottom: 5px; }
+        
+        .texto-biblico { color: var(--biblical-red) !important; font-style: italic; }
+        .cita-negrita { font-weight: 900 !important; color: #000; }
+        
+        blockquote {
+            border-left: 5px solid var(--accent-gold);
+            background: #fffcf0; padding: 20px; margin: 25px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .salmo-container {
+            background-color: #f4f6f8; padding: 25px; border-radius: 8px;
+            margin-top: 30px; font-size: 0.95em;
+        }
 
-    Somos la Justicia de Dios en Cristo : El alivio del creyente no nace de intentar "pensar más bonito" de sí mismo, sino de reconocer que ya no tiene que ser su propio juez.
-    El Peligro del Orgullo Interno: Cuando nos condenamos, intentamos sustituir a Cristo. Si Dios dijo "Consumado es", nuestra mente no tiene permiso para reabrir el caso.
-    El Intercesor Permanente (Romanos 8:33-34): ¿Quién acusará? Dios es el que justifica. Nuestra seguridad nace de que Cristo murió, resucitó e intercede por nosotros hoy.
+        input[type="color"] { border: none; width: 30px; height: 30px; cursor: pointer; background: none; }
 
-Conclusión y Aplicación: Del Juicio al Descanso
+        @media print { #toolbar, .tabs { display: none; } }
+    </style>
+</head>
+<body>
 
-    Resumen: El Evangelio no es terapia, es una Justicia superior. Dios responde a tus pensamientos acusadores con adopción y gracia.
-    Pregunta de Reflexión: ¿Vas a creerle a la sentencia de tus pensamientos o a la palabra final del Padre?
-    Llamado al Descanso: Hoy, entrega el mazo del juez. El tribunal ha sido disuelto; puedes irte a casa en paz.
+    <div id="toolbar">
+        <div class="tool-group">
+            <button onclick="document.execCommand('undo')" title="Echar atrás">↶ Deshacer</button>
+            <button onclick="document.execCommand('redo')" title="Rehacer">↷</button>
+        </div>
 
+        <div class="tool-group">
+            <button onclick="changeFontSize(2)">A+</button>
+            <button onclick="changeFontSize(-2)">A-</button>
+            <input type="color" id="colorPicker" onchange="changeColor()" title="Color de texto">
+        </div>
 
+        <div class="tool-group">
+            <span id="stopwatch-display">00:00:00</span>
+            <button onclick="toggleStopwatch()" id="btn-sw">Iniciar</button>
+        </div>
 
-Salmo 73
+        <div class="tool-group">
+            <button onclick="speakText()">🔊 Leer</button>
+            <button onclick="saveAsHTML()" style="background: var(--accent-gold); color: black; font-weight: bold;">💾 GUARDAR</button>
+        </div>
+    </div>
 
-1 En verdad Dios es bueno con Israel,
-    con los de corazón puro.
-2 Pero en cuanto a mí, casi perdí el equilibrio;
-    mis pies resbalaron y estuve a punto de caer,
-3 porque envidiaba a los orgullosos
-    cuando los veía prosperar a pesar de su maldad.
-4 Pareciera que viven sin problemas;
-    tienen el cuerpo tan sano y fuerte.
-5 No tienen dificultades como otras personas;
-    no están llenos de problemas como los demás.
-6 Lucen su orgullo como un collar de piedras preciosas
-    y se visten de crueldad.
-7 ¡Estos gordos ricachones tienen todo
-    lo que su corazón desea!
-8 Se burlan y hablan solo maldades;
-    en su orgullo procuran aplastar a otros.
-9 Se jactan contra los cielos mismos,
-    y sus palabras se pasean presuntuosas por toda la tierra.
-10 Entonces la gente se desanima y se confunde
-    al tragarse todas esas palabras.
-11 «¿Y qué sabe Dios?—preguntan—.
-    ¿Acaso el Altísimo sabe lo que está pasando?».
-12 Miren a esos perversos:
-    disfrutan de una vida fácil mientras sus riquezas se multiplican.
+    <div class="notebook-container">
+        <div class="header-pas">
+            <h1>Libreta Pro</h1>
+            <p>Diseño Optimizado para Sensibilidad y Profundidad</p>
+        </div>
 
-13 ¿Conservé puro mi corazón en vano?
-    ¿Me mantuve en inocencia sin ninguna razón?
-14 En todo el día no consigo más que problemas;
-    cada mañana me trae dolor.
+        <div class="tabs">
+            <button class="tab-btn active" onclick="abrirPestana(event, 'bosquejo')">Bosquejo</button>
+            <button class="tab-btn" onclick="abrirPestana(event, 'lectura')">Lectura Bíblica</button>
+        </div>
 
-15 Si yo realmente hubiera hablado a otros de esta manera,
-    habría sido un traidor a tu pueblo.
-16 Traté de entender por qué los malvados prosperan,
-    ¡pero qué tarea tan difícil!
-17 Entonces entré en tu santuario, oh Dios,
-    y por fin entendí el destino de los perversos.
-18 En verdad, los pones en un camino resbaladizo
-    y haces que se deslicen por el precipicio hacia su ruina.
-19 Al instante, quedan destruidos,
-    totalmente consumidos por los terrores.
-20 Cuando te levantes, oh Señor,
-    te reirás de sus tontas ideas
-    como uno se ríe por la mañana de lo que soñó en la noche.
+        <div id="bosquejo" class="tab-content active" contenteditable="true" onkeydown="handleTab(event)">
+            
+            <h2 class="subtitulo-pro">Buena Noticia</h2>
+            <p>
+                <span class="texto-biblico">Justificados, pues, por la fe, tenemos paz para con Dios por medio de nuestro Señor Jesucristo.</span> <span class="cita-negrita">Romanos 5:1</span>
+            </p>
 
-21 Entonces me di cuenta de que mi corazón se llenó de amargura,
-    y yo estaba destrozado por dentro.
-22 Fui tan necio e ignorante;
-    debo haberte parecido un animal sin entendimiento.
-23 Sin embargo, todavía te pertenezco;
-    me tomas de la mano derecha.
-24 Me guías con tu consejo
-    y me conduces a un destino glorioso.
-25 ¿A quién tengo en el cielo sino a ti?
+            <h1 class="titulo-pro">Dios sabe todas las cosas</h1>
+            
+            <p><strong>Propósito:</strong> Desmantelar la autoacusación legalista para descansar en la justicia de Cristo.</p>
+
+            <blockquote>
+                <span class="texto-biblico">"Pues si nuestro corazón nos reprende, mayor es Dios que nuestro corazón, y él sabe todas las cosas."</span> 
+                — <span class="cita-negrita">1 Juan 3:20</span>
+            </blockquote>
+
+            <h2 class="subtitulo-pro">Introducción: El Desgaste de la Narrativa Interna</h2>
+            <ul>
+                <li><strong>Identificación:</strong> Existe un cansancio que no proviene del trabajo físico, sino del diálogo constante que sostenemos con nosotros mismos. Es ese murmullo que drena la paz y nos deja siempre sintiéndonos en deuda.</li>
+                <li><strong>La Ilustración de Asaf (<span class="cita-negrita">Salmo 73</span>):</strong> Usamos a Asaf para decir: "No te pasa solo a ti". Un hombre de Dios admitió que sus pensamientos casi le hacen perder el equilibrio. Su mente estaba amargada y sus pensamientos lo hacían sentir "como un animal" (v. 22).</li>
+                <li><strong>Punto clave:</strong> La crisis de Asaf no fue un pecado externo, fue una crisis de pensamientos distorsionados que lo llevaron al agotamiento. Él representa a todo aquel cuya mente ha construido una versión severa y estrecha de su propia historia.</li>
+            </ul>
+
+            <h2 class="subtitulo-pro">Cuando la Mente se Convierte en Fiscal</h2>
+            <ul>
+                <li><span class="texto-biblico">"Pues si nuestro corazón nos reprende..."</span> (<span class="cita-negrita">1 Juan 3:20a</span>)</li>
+                <li><strong>La Mente que Reprende:</strong> Juan reconoce que nuestra narrativa interna a menudo actúa como un tribunal. Son pensamientos que cuestionan, enjuician y condenan, susurrando: "No fue suficiente", 
+                    <br>&nbsp;&nbsp;&nbsp;&nbsp;"Debiste hacerlo mejor".
+                    <br>&nbsp;&nbsp;&nbsp;&nbsp;“No fue suficiente.”
+                    <br>&nbsp;&nbsp;&nbsp;&nbsp;“Debiste hacerlo mejor.”
+                    <br>&nbsp;&nbsp;&nbsp;&nbsp;“Mira cómo a otros les va.”
+                    <br>&nbsp;&nbsp;&nbsp;&nbsp;“No puedes descansar todavía.”
+                    <br>&nbsp;&nbsp;&nbsp;&nbsp;“Tu esfuerzo parece en vano.”
+                </li>
+                <li><strong>La Sentencia :</strong> Cuando la mente toma el control, reinterpreta la realidad y establece veredictos de culpabilidad internos.</li>
+                <li><strong>La Verdad Liberadora:</strong> Nuestra mente puede hablar, pero no tiene la autoridad final. No tiene el derecho legal de ocupar el lugar de Dios.</li>
+            </ul>
+
+            <h2 class="subtitulo-pro">Dios es Mayor que nuestros pensamientos</h2>
+            <ul>
+                <li><span class="texto-biblico">"...mayor es Dios que nuestro corazón, y él sabe todas las cosas."</span> (<span class="cita-negrita">1 Juan 3:20b</span>)</li>
+                <li><strong>Dios no juzga desde lo parcial:</strong> Nuestra mente juzga desde el cansancio o la inestabilidad emocional. El Padre es Mayor que nuestra manera de pensar. Sus pensamientos son más elevados.</li>
+                <li><strong>Eterno conocimiento de Dios:</strong> El hecho de que "Él sabe todas las cosas" no es una amenaza, es un alivio. Tu mente solo ve el error; el Padre conoce el diseño completo.</li>
+                <li>Mientras tus pensamientos te dicen "insuficiente", Dios te mira a través del lente de Su amor soberano. y su obra en Cristo</li>
+            </ul>
+
+            <h2 class="subtitulo-pro">La Victoria de Cristo: El Caso Cerrado en el Cielo</h2>
+            <ul>
+                <li><strong>Somos la Justicia de Dios en Cristo :</strong> El alivio del creyente no nace de intentar "pensar más bonito" de sí mismo, sino de reconocer que ya no tiene que ser su propio juez.</li>
+                <li><strong>El Peligro del Orgullo Interno:</strong> Cuando nos condenamos, intentamos sustituir a Cristo. Si Dios dijo "Consumado es", nuestra mente no tiene permiso para reabrir el caso.</li>
+                <li><strong>El Intercesor Permanente (<span class="cita-negrita">Romanos 8:33-34</span>):</strong> ¿Quién acusará? Dios es el que justifica. Nuestra seguridad nace de que Cristo murió, resucitó e intercede por nosotros hoy.</li>
+            </ul>
+
+            <h2 class="subtitulo-pro">Conclusión y Aplicación: Del Juicio al Descanso</h2>
+            <ul>
+                <li><strong>Resumen:</strong> El Evangelio no es terapia, es una Justicia superior. Dios responde a tus pensamientos acusadores con adopción y gracia.</li>
+                <li><strong>Pregunta de Reflexión:</strong> ¿Vas a creerle a la sentencia de tus pensamientos o a la palabra final del Padre?</li>
+                <li><strong>Llamado al Descanso:</strong> Hoy, entrega el mazo del juez. El tribunal ha sido disuelto; puedes irte a casa en paz.</li>
+            </ul>
+        </div>
+
+        <div id="lectura" class="tab-content" contenteditable="true" onkeydown="handleTab(event)">
+            <h2 class="subtitulo-pro">Salmo 73</h2>
+            <div class="salmo-container texto-biblico">
+                1 En verdad Dios es bueno con Israel,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;con los de corazón puro.<br>
+                2 Pero en cuanto a mí, casi perdí el equilibrio;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;mis pies resbalaron y estuve a punto de caer,<br>
+                3 porque envidiaba a los orgullosos<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;cuando los veía prosperar a pesar de su maldad.<br>
+                4 Pareciera que viven sin problemas;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;tienen el cuerpo tan sano y fuerte.<br>
+                5 No tienen dificultades como otras personas;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;no están llenos de problemas como los demás.<br>
+                6 Lucen su orgullo como un collar de piedras preciosas<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;y se visten de crueldad.<br>
+                7 ¡Estos gordos ricachones tienen todo<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;lo que su corazón desea!<br>
+                8 Se burlan y hablan solo maldades;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;en su orgullo procuran aplastar a otros.<br>
+                9 Se jactan contra los cielos mismos,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;y sus palabras se pasean presuntuosas por toda la tierra.<br>
+                10 Entonces la gente se desanima y se confunde<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;al tragarse todas esas palabras.<br>
+                11 «¿Y qué sabe Dios?—preguntan—.<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;¿Acaso el Altísimo sabe lo que está pasando?».<br>
+                12 Miren a esos perversos:<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;disfrutan de una vida fácil mientras sus riquezas se multiplican.<br>
+                13 ¿Conservé puro mi corazón en vano?<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;¿Me mantuve en inocencia sin ninguna razón?<br>
+                14 En todo el día no consigo más que problemas;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;cada mañana me trae dolor.<br>
+                15 Si yo realmente hubiera hablado a otros de esta manera,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;habría sido un traidor a tu pueblo.<br>
+                16 Traté de entender por qué los malvados prosperan,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;¡pero qué tarea tan difícil!<br>
+                17 Entonces entré en tu santuario, oh Dios,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;y por fin entendí el destino de los perversos.<br>
+                18 En verdad, los pones en un camino resbaladizo<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;y haces que se deslicen por el precipicio hacia su ruina.<br>
+                19 Al instante, quedan destruidos,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;totalmente consumidos por los terrores.<br>
+                20 Cuando te levantes, oh Señor,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;te reirás de sus tontas ideas<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;como uno se ríe por la mañana de lo que soñó en la noche.<br>
+                21 Entonces me di cuenta de que mi corazón se llenó de amargura,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;y yo estaba destrozado por dentro.<br>
+                22 Fui tan necio e ignorante;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;debo haberte parecido un animal sin entendimiento.<br>
+                23 Sin embargo, todavía te pertenezco;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;me tomas de la mano derecha.<br>
+                24 Me guías con tu consejo<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;y me conduces a un destino glorioso.<br>
+                25 ¿A quién tengo en el cielo sino a ti?
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function changeColor() {
+            const color = document.getElementById('colorPicker').value;
+            document.execCommand('foreColor', false, color);
+        }
+
+        let fontSize = 20;
+        function changeFontSize(step) {
+            fontSize += step;
+            document.querySelector('.tab-content.active').style.fontSize = fontSize + "px";
+        }
+
+        function handleTab(e) {
+            if (e.key === 'Tab') {
+                e.preventDefault();
+                document.execCommand('insertHTML', false, '&nbsp;&nbsp;&nbsp;&nbsp;');
+            }
+        }
+
+        function abrirPestana(evt, id) {
+            const contents = document.getElementsByClassName("tab-content");
+            for (let c of contents) c.classList.remove("active");
+            const btns = document.getElementsByClassName("tab-btn");
+            for (let b of btns) b.classList.remove("active");
+            document.getElementById(id).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+
+        let timer, sec = 0, running = false;
+        function toggleStopwatch() {
+            const btn = document.getElementById('btn-sw');
+            if (!running) {
+                timer = setInterval(() => {
+                    sec++;
+                    let h = Math.floor(sec/3600).toString().padStart(2,'0');
+                    let m = Math.floor((sec%3600)/60).toString().padStart(2,'0');
+                    let s = (sec%60).toString().padStart(2,'0');
+                    document.getElementById('stopwatch-display').innerText = `${h}:${m}:${s}`;
+                }, 1000);
+                btn.innerText = "Pausar";
+            } else {
+                clearInterval(timer);
+                btn.innerText = "Reanudar";
+            }
+            running = !running;
+        }
+
+        function speakText() {
+            const text = document.querySelector('.tab-content.active').innerText;
+            const utter = new SpeechSynthesisUtterance(text);
+            utter.lang = 'es-ES';
+            window.speechSynthesis.speak(utter);
+        }
+
+        function saveAsHTML() {
+            const blob = new Blob([document.documentElement.outerHTML], { type: 'text/html' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'Libreta_Pro_Final_Exacta.html';
+            a.click();
+        }
+    </script>
+</body>
+</html>
